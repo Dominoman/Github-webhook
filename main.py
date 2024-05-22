@@ -12,14 +12,21 @@ app = Flask(__name__)
 def process():
     payload = request.json
     repository = payload["repository"]
-    print(repository["full_name"])
+    print(f"Repository:{repository["full_name"]}")
     name = repository["name"]
-    git_url = repository["git_url"]
+    head_commit = repository["head_commit"]
+    print(f"Message:{head_commit["message"]}")
+    branch = payload["ref"].split('/')[-1]
+    master_branch = repository["master_branch"]
+    if branch != master_branch:
+        print("Skipped")
+        return
     current_path = os.path.dirname(os.path.realpath(__file__))
     parent = Path(current_path).parent.absolute()
     app_path = os.path.join(parent, name)
     if not os.path.exists(app_path):
         os.chdir(parent)
+        git_url = repository["git_url"]
         subprocess.run(["git", f"clone {git_url}"])
         os.chdir(app_path)
     else:
