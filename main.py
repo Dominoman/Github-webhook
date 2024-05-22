@@ -33,7 +33,7 @@ def process():
         os.chdir(app_path)
         subprocess.run(["git", "pull"])
     if os.path.exists("run-me.sh"):
-        subprocess.run(["run-me.sh"])
+        subprocess.run(["bash","run-me.sh"])
     return "Ok"
 
 
