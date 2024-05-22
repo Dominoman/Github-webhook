@@ -14,7 +14,7 @@ def process():
     repository = payload["repository"]
     print(f"Repository:{repository['full_name']}")
     name = repository["name"]
-    head_commit = repository["head_commit"]
+    head_commit = payload["head_commit"]
     print(f"Message:{head_commit['message']}")
     branch = payload["ref"].split('/')[-1]
     master_branch = repository["master_branch"]
