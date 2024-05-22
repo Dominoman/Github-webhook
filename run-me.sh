@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 set -ex
 
-# Csinálunk python virtuáis környezetet, ha nincs
+# Virtuális környezet létrehozása
 if [ ! -x .venv ] ; then
   python -m venv .venv
 fi
