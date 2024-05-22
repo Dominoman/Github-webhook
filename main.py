@@ -17,14 +17,14 @@ def process():
     git_url = repository["git_url"]
     current_path = os.path.dirname(os.path.realpath(__file__))
     parent = Path(current_path).parent.absolute()
-    app_path=os.path.join(parent,name)
+    app_path = os.path.join(parent, name)
     if not os.path.exists(app_path):
         os.chdir(parent)
-        subprocess.run(["git",f"clone {git_url}"])
+        subprocess.run(["git", f"clone {git_url}"])
         os.chdir(app_path)
     else:
         os.chdir(app_path)
-        subprocess.run(["git","pull"])
+        subprocess.run(["git", "pull"])
     if os.path.exists("run-me.sh"):
         subprocess.run(["run-me.sh"])
     return "Ok"
