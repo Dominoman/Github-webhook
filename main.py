@@ -6,7 +6,7 @@ from pathlib import Path
 
 from flask import Flask, request
 
-logging.basicConfig(filename="app.log", level=logging.INFO)
+logging.basicConfig(filename="app.log", level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 app = Flask(__name__)
 
 
