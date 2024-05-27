@@ -16,4 +16,7 @@ if [ -f requirements.txt ] ; then
   pip install -r requirements.txt
 fi
 
+# Restart gunicorn
+sudo systemctl restart gunicorn
+
 deactivate
