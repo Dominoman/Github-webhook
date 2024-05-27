@@ -29,17 +29,17 @@ def process():
     if not os.path.exists(app_path):
         os.chdir(parent)
         git_url = repository["git_url"]
-        result = subprocess.run(["git", f"clone {git_url}"], text=True)
+        result = subprocess.run(["git", f"clone {git_url}"], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
         os.chdir(app_path)
     else:
         os.chdir(app_path)
-        result = subprocess.run(["git", "pull"], text=True)
+        result = subprocess.run(["git", "pull"], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
     if os.path.exists("run-me.sh"):
-        result = subprocess.run(["bash", "run-me.sh"], text=True)
+        result = subprocess.run(["bash", "run-me.sh"], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
     return "Ok"
