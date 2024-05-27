@@ -33,16 +33,19 @@ def process():
     if not os.path.exists(app_path):
         os.chdir(parent)
         git_url = repository["git_url"]
+        app.logger.info(f"Cloning:{git_url} under {parent}")
         result = subprocess.run(["git", "clone", git_url], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
         os.chdir(app_path)
     else:
         os.chdir(app_path)
+        app.logger.info(f"pulling under {app_path}")
         result = subprocess.run(["git", "pull"], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
     if os.path.exists("run-me.sh"):
+        app.logger.info("Running run-me.sh")
         result = subprocess.run(["bash", "run-me.sh"], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
