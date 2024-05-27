@@ -6,7 +6,7 @@ from pathlib import Path
 
 from flask import Flask, request
 
-logging.basicConfig(filename="app.log",level=logging.INFO)
+logging.basicConfig(filename="app.log", level=logging.INFO)
 app = Flask(__name__)
 
 
@@ -29,13 +29,19 @@ def process():
     if not os.path.exists(app_path):
         os.chdir(parent)
         git_url = repository["git_url"]
-        subprocess.run(["git", f"clone {git_url}"])
+        result = subprocess.run(["git", f"clone {git_url}"], text=True)
+        app.logger.info(result.stdout)
+        app.logger.error(result.stderr)
         os.chdir(app_path)
     else:
         os.chdir(app_path)
-        subprocess.run(["git", "pull"])
+        result = subprocess.run(["git", "pull"], text=True)
+        app.logger.info(result.stdout)
+        app.logger.error(result.stderr)
     if os.path.exists("run-me.sh"):
-        subprocess.run(["bash","run-me.sh"])
+        result = subprocess.run(["bash", "run-me.sh"], text=True)
+        app.logger.info(result.stdout)
+        app.logger.error(result.stderr)
     return "Ok"
 
 
