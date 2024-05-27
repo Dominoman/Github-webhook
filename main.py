@@ -49,6 +49,7 @@ def process():
         result = subprocess.run(["bash", "run-me.sh"], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
+    app.logger.info("Done")
     return "Ok"
 
 
