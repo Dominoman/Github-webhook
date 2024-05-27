@@ -12,6 +12,10 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def process():
+    event = request.headers["X-GitHub-Event"]
+    app.logger.info(event)
+    if event != "push":
+        return "Thanks"
     payload = request.json
     repository = payload["repository"]
     app.logger.info(f"Repository:{repository['full_name']}")
