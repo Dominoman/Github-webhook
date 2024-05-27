@@ -32,7 +32,7 @@ def process():
     app_path = os.path.join(parent, name)
     if not os.path.exists(app_path):
         os.chdir(parent)
-        git_url = repository["git_url"]
+        git_url = repository["git_url"].replace("git://","https://")
         app.logger.info(f"Cloning:{git_url} under {parent}")
         result = subprocess.run(["git", "clone", git_url], capture_output=True, text=True)
         app.logger.info(result.stdout)
