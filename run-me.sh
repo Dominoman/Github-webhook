@@ -23,7 +23,9 @@ fi
 currentpath=$(pwd)
 sed -i "s|%currentpath%|$currentpath|g" github-webhook.service
 
-sudo ln -s "$currentpath/github-webhook.service" /etc/systemd/system/github-webhook.service
+if [ ! -f /etc/systemd/system/github-webhook.service ] ; then
+  sudo ln -s "$currentpath/github-webhook.service" /etc/systemd/system/github-webhook.service
+fi
 
 # Restart gunicorn
 sudo systemctl daemon-reload
