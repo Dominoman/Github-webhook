@@ -16,6 +16,10 @@ if [ -f requirements.txt ] ; then
   pip install -r requirements.txt
 fi
 
+if [ ! -f github-webhook.service ] ; then
+  cp github-webhook.service.template github-webhook.service
+fi
+
 # Restart gunicorn
 sudo systemctl restart gunicorn
 
