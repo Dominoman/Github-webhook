@@ -20,7 +20,7 @@ fi
 if [ ! -f github-webhook.service ] ; then
   cp github-webhook.service.template github-webhook.service
   currentpath=$(pwd)
-  sed -s "s|%currentpath%|$currentpath|g" github-webhook.service
+  sed -i "s|%currentpath%|$currentpath|g" github-webhook.service
 fi
 
 # Restart gunicorn
