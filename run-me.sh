@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+currentpath="$(dirname "$0")"
+cd $currentpath
 set -ex
 
 # Virtuális környezet létrehozása
@@ -18,6 +19,7 @@ fi
 
 if [ ! -f github-webhook.service ] ; then
   cp github-webhook.service.template github-webhook.service
+  sed -s "s/%currentpath%/$currentpath/g" github-webhook.service
 fi
 
 # Restart gunicorn
