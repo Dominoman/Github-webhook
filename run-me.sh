@@ -27,6 +27,6 @@ sudo ln -s "$currentpath/github-webhook.service" /etc/systemd/system/github-webh
 
 # Restart gunicorn
 sudo systemctl daemon-reload
-sudo systemctl restart gunicorn
+sudo systemctl restart github-webhook
 
 deactivate
