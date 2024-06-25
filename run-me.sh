@@ -19,11 +19,14 @@ fi
 
 if [ ! -f github-webhook.service ] ; then
   cp github-webhook.service.template github-webhook.service
-  currentpath=$(pwd)
-  sed -i "s|%currentpath%|$currentpath|g" github-webhook.service
 fi
+currentpath=$(pwd)
+sed -i "s|%currentpath%|$currentpath|g" github-webhook.service
+
+sudo ln -s "$currentpath/github-webhook.service" /etc/systemd/system/github-webhook.service
 
 # Restart gunicorn
+sudo systemctl daemon-reload
 sudo systemctl restart gunicorn
 
 deactivate
