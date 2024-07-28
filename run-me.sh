@@ -29,6 +29,7 @@ fi
 
 # Restart gunicorn
 sudo systemctl daemon-reload
+sudo systemctl enable github-webhook
 sudo systemctl restart github-webhook
 
 deactivate
