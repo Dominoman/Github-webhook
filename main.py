@@ -50,7 +50,7 @@ def post_process():
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
     if os.path.exists("run-me.sh"):
-        os.chmod("run-me.sh",744)
+        os.chmod("run-me.sh",0o744)
         app.logger.info("Running run-me.sh")
         result = subprocess.run(["bash", "run-me.sh"], capture_output=True, text=True)
         app.logger.info(result.stdout)
