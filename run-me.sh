@@ -1,16 +1,15 @@
 #!/bin/bash
 
-
 cd "$(dirname "$0")"
 set -ex
 
 # Virtuális környezet létrehozása
-if [ ! -x .venv ] ; then
-  python -m venv .venv
+if [ ! -f pyvenv.cfg ] ; then
+  python -m venv .
 fi
 
 # Aktiváljuk a virtuális környezetet
-source .venv/bin/activate
+source bin/activate
 
 # Csomagok installálása
 if [ -f requirements.txt ] ; then
