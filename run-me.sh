@@ -16,19 +16,26 @@ if [ -f requirements.txt ] ; then
   pip install -r requirements.txt
 fi
 
-if [ ! -f github-webhook.service ] ; then
-  cp github-webhook.service.template github-webhook.service
-fi
 currentpath=$(pwd)
-sed -i "s|%currentpath%|$currentpath|g" github-webhook.service
+username=$(whoami)
+groupname=$(id -gn)
+servicename="github-webhook"
 
-if [ ! -f /etc/systemd/system/github-webhook.service ] ; then
-  sudo ln -s "$currentpath/github-webhook.service" /etc/systemd/system/github-webhook.service
+
+
+if [ ! -f $servicename.service ] ; then
+  cp $servicename.service.template $servicename.service
+fi
+
+sed -i "s|%currentpath%|$currentpath|g; s|%username%|$username|g; s|%groupname%|$groupname|g" $servicename.service
+
+if [ ! -f /etc/systemd/system/$servicename.service ] ; then
+  sudo ln -s "$currentpath/$servicename.service" /etc/systemd/system/$servicename.service
 fi
 
 # Restart gunicorn
 sudo systemctl daemon-reload
-sudo systemctl enable github-webhook
-sudo systemctl restart github-webhook
+sudo systemctl enable $servicename
+sudo systemctl restart $servicename
 
 deactivate
