@@ -17,6 +17,8 @@ def get_process():
 
 @app.route('/', methods=['POST'])
 def post_process():
+    if "X-GitHub-Event" not in request.headers:
+        return 'Sabai sabai'
     event = request.headers["X-GitHub-Event"]
     app.logger.info(event)
     if event != "push":
@@ -31,7 +33,7 @@ def post_process():
     master_branch = repository["master_branch"]
     if branch != master_branch:
         app.logger.info("Skipped - no master branch")
-        return
+        return ""
     current_path = os.path.dirname(os.path.realpath(__file__))
     parent = Path(current_path).parent.absolute()
     app_path = os.path.join(parent, name)
