@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
+import hashlib
+import hmac
 import logging
 import os.path
 import subprocess
 from pathlib import Path
 
-from flask import Flask, request
+from dotenv import load_dotenv
+from flask import Flask, request, abort
 
 logging.basicConfig(filename="app.log", level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
+load_dotenv()
 app = Flask(__name__)
+
+WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET").encode()
 
 
 @app.route('/', methods=['GET'])
@@ -18,7 +24,21 @@ def get_process():
 @app.route('/', methods=['POST'])
 def post_process():
     if "X-GitHub-Event" not in request.headers:
-        return 'Sabai sabai',404
+        abort(404,'Sabai sabai')
+
+    signature = request.headers.get("X-Hub-Signature-256")
+    if signature is None:
+        app.logger.info("Missing signature")
+        abort(400, "Missing signature")
+
+    sha_name, signature_value = signature.split("=")
+    mac = hmac.new(WEBHOOK_SECRET, msg=request.data, digestmod=hashlib.sha256)
+    expected_signature = mac.hexdigest()
+
+    if not hmac.compare_digest(expected_signature, signature_value):
+        app.logger.info("Invalid signature")
+        abort(403, "Invalid signature")
+
     event = request.headers["X-GitHub-Event"]
     app.logger.info(event)
     if event != "push":
@@ -31,9 +51,10 @@ def post_process():
     app.logger.info(f"Message:{head_commit['message']}")
     branch = payload["ref"].split('/')[-1]
     master_branch = repository["master_branch"]
+    owner = repository["owner"]["email"]
     if branch != master_branch:
         app.logger.info("Skipped - no master branch")
-        return "No master branch", 404
+        abort(404,"No master branch")
     current_path = os.path.dirname(os.path.realpath(__file__))
     parent = Path(current_path).parent.absolute()
     app_path = os.path.join(parent, name)
@@ -57,6 +78,9 @@ def post_process():
         result = subprocess.run(["bash", "run-me.sh"], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
+    if owner!="":
+        # here need send the current log by email to the owner
+        pass
     app.logger.info("Done")
     return "Ok"
 
