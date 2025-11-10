@@ -18,6 +18,7 @@ WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET").encode()
 
 @app.route('/', methods=['GET'])
 def get_process():
+    result = subprocess.run(["uv",], capture_output=True, text=True)
     return 'Sabai sabai'
 
 
