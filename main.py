@@ -14,6 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 
 WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET").encode()
+UV = os.getenv("UV")
 
 
 @app.route('/', methods=['GET'])
@@ -71,6 +72,11 @@ def post_process():
         os.chdir(app_path)
         app.logger.info(f"pulling under {app_path}")
         result = subprocess.run(["git", "pull"], capture_output=True, text=True)
+        app.logger.info(result.stdout)
+        app.logger.error(result.stderr)
+    if os.path.exists("pyproject.toml") and UV!="":
+        app.logger.info("Running uv")
+        result = subprocess.run([UV, "sync"], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
     if os.path.exists("run-me.sh"):
