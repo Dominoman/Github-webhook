@@ -74,7 +74,7 @@ def post_process():
         app.logger.error(result.stderr)
     if os.path.exists("pyproject.toml"):
         app.logger.info("Running uv")
-        result = subprocess.run(["bash", "uv sync"], capture_output=True, text=True)
+        result = subprocess.run(["uv", "sync"], capture_output=True, text=True)
         app.logger.info(result.stdout)
         app.logger.error(result.stderr)
     if os.path.exists("run-me.sh"):
