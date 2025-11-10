@@ -19,7 +19,6 @@ UV = os.getenv("UV")
 
 @app.route('/', methods=['GET'])
 def get_process():
-    result = subprocess.run(["uv",], capture_output=True, text=True)
     return 'Sabai sabai'
 
 
