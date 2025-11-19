@@ -52,10 +52,11 @@ def post_process():
     app.logger.info(f"Message:{head_commit['message']}")
     branch = payload["ref"].split('/')[-1]
     master_branch = repository["master_branch"]
+    default_branch = repository["default_branch"]
     owner = repository["owner"]["email"]
-    if branch != master_branch:
-        app.logger.info("Skipped - no master branch")
-        abort(404,"No master branch")
+    if branch != default_branch:
+        app.logger.info("Skipped - isn't the default branch")
+        abort(404,"Not the default branch")
     current_path = os.path.dirname(os.path.realpath(__file__))
     parent = Path(current_path).parent.absolute()
     app_path = os.path.join(parent, name)
